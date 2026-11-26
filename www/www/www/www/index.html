@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B2545">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<title>مدرسة ABC</title>
+<style>
+:root{--bg:#EEF3F6;--ink:#0B2545;--mut:#5A6B7E;--card:#fff;--line:#D5DEE6;--g:#0F8B5F;--r:#D1332E;--n:#0B2545;--a:#E0A526;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#08151F;--ink:#E8EEF3;--mut:#93A4B5;--card:#10222F;--line:#1F3445;--n:#1D4577}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,"Segoe UI",Tahoma,sans-serif;line-height:1.6;min-height:100vh}
+.wrap{max-width:520px;margin:0 auto;padding:16px}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.logo{display:flex;gap:4px;direction:ltr}
+.logo b{width:30px;height:38px;border-radius:8px;display:grid;place-items:center;color:#fff;font:800 18px Arial,sans-serif;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.logo b:nth-child(1){background:var(--g)}.logo b:nth-child(2){background:var(--r)}.logo b:nth-child(3){background:var(--a);color:#1a1200}
+h1{font-size:20px;margin:0;line-height:1.2}
+.top p{margin:0;color:var(--mut);font-size:13px}
+h2{font-size:24px;margin:0 0 4px}
+.lead{margin:0 0 18px;color:var(--mut)}
+.g{--bgc:var(--g);--fg:#fff}.r{--bgc:var(--r);--fg:#fff}.n{--bgc:var(--n);--fg:#fff}.a{--bgc:var(--a);--fg:#1a1200}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tile{background:var(--bgc);color:var(--fg);border:0;border-radius:20px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:700 18px inherit;font-family:inherit;cursor:pointer;box-shadow:0 7px 0 rgba(0,0,0,.28);animation:drop .5s cubic-bezier(.3,1.4,.5,1) both}
+.tile:nth-child(2){animation-delay:.08s}.tile:nth-child(3){animation-delay:.16s}.tile:nth-child(4){animation-delay:.24s}
+.tile:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.28)}
+.ltr{font-size:64px;font-weight:800;line-height:1}
+@keyframes drop{from{opacity:0;transform:translateY(-24px) rotate(-3deg)}}
+.hero{background:var(--bgc);color:var(--fg);border-radius:20px;padding:18px;display:flex;align-items:center;gap:16px;box-shadow:0 6px 0 rgba(0,0,0,.28);margin-bottom:20px}
+.hero .ltr{font-size:52px}.hero p{margin:0;opacity:.92}
+.fld{display:block;font-size:14px;color:var(--mut);margin-bottom:16px}
+select{display:block;width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:16px inherit;font-family:inherit}
+.list{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:14px;text-align:start;width:100%;padding:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;font-family:inherit;cursor:pointer}
+.bd{flex:none;width:44px;height:44px;border-radius:12px;background:var(--bgc,var(--n));display:grid;place-items:center;font-size:22px;font-weight:800;color:#fff}
+.tx{flex:1;display:flex;flex-direction:column}.tx strong{font-size:16px}.tx small{color:var(--mut);font-size:13px}
+.row em{font-style:normal;font-size:12px;color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:2px 10px;white-space:nowrap}
+.link{margin-top:18px;background:none;border:0;color:var(--mut);font:14px inherit;font-family:inherit;text-decoration:underline;cursor:pointer}
+#toast{position:fixed;inset-inline:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:488px;margin:auto;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;opacity:0;transform:translateY(12px);transition:.25s;pointer-events:none}
+#toast.on{opacity:1;transform:none}
+:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.tile{animation:none}#toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><div class="logo" aria-hidden="true"><b>A</b><b>B</b><b>C</b></div><div><h1>مدرسة ABC</h1><p>المنهج الليبي</p></div></header>
+  <main id="app"></main>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=s=>document.querySelector(s);
+const ROLES={
+ student:{n:'طالب',l:'ط',c:'g',h:'راجع دروسك، والعب، واختبر نفسك'},
+ teacher:{n:'معلم',l:'م',c:'r',h:'حضّر حصصك وامتحاناتك في دقائق'},
+ parent:{n:'ولي أمر',l:'و',c:'n',h:'تابع مستوى ابنك خطوة بخطوة'},
+ admin:{n:'إدارة',l:'إ',c:'a',h:'أدر الفصول والحضور والتقارير'}
+};
+const MODS={
+ teacher:[['محضّر الدروس الذكي','خطة الحصة والأهداف والأنشطة بالذكاء الاصطناعي',3],['بنك الامتحانات','أنشئ نماذج وصحّحها تلقائيًا',4],['متابعة الطلاب','الحضور والدرجات ونقاط الضعف',5],['المذكرات والملخصات','ملخصات جاهزة للطباعة',7]],
+ student:[['ألعاب المراجعة','تحديات وبطاقات تلخّص المنهج',6],['امتحاناتي','حلّ الامتحانات وشاهد نتيجتك',4],['مذكراتي','ملخصات ومراجعات لكل مادة',7],['تقدّمي','نقاطك وشاراتك ومستواك',5]],
+ parent:[['مستوى ابني','الدرجات ونقاط القوة والضعف',5],['الحضور والغياب','سجل الحضور اليومي',5],['رسائل المعلمين','تواصل مباشر مع المعلم',8]],
+ admin:[['الطلاب والفصول','إضافة الطلاب وتوزيعهم',2],['الحضور','حضور الطلاب والمعلمين',5],['التقارير','تقارير شاملة للمدرسة',5]]
+};
+const STAGES=['الأول','الثاني','الثالث','الرابع','الخامس','السادس','السابع','الثامن','التاسع'].map(x=>'الصف '+x+' أساسي').concat(['الأول الثانوي','الثاني الثانوي','الثالث الثانوي']);
+let S={role:null,stage:0};
+try{Object.assign(S,JSON.parse(localStorage.getItem('abc')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('abc',JSON.stringify(S))}catch(e){}};
+function render(){
+ const app=$('#app');
+ if(!ROLES[S.role]){
+  app.innerHTML=`<section><h2>من يستخدم التطبيق؟</h2><p class="lead">اختر دورك لتظهر لك الأدوات المناسبة.</p><div class="tiles">${Object.entries(ROLES).map(([k,r])=>`<button class="tile ${r.c}" data-role="${k}"><span class="ltr">${r.l}</span><span>${r.n}</span></button>`).join('')}</div></section>`;
+  return;
+ }
+ const r=ROLES[S.role];
+ app.innerHTML=`<section><div class="hero ${r.c}"><span class="ltr">${r.l}</span><div><h2>${r.n}</h2><p>${r.h}</p></div></div>
+ <label class="fld">المرحلة الدراسية<select id="stage">${STAGES.map((s,i)=>`<option value="${i}"${i===S.stage?' selected':''}>${s}</option>`).join('')}</select></label>
+ <div class="list ${r.c}">${MODS[S.role].map(m=>`<button class="row" data-t="${m[0]}" data-n="${m[2]}"><span class="bd">${m[0][0]}</span><span class="tx"><strong>${m[0]}</strong><small>${m[1]}</small></span><em>المرحلة ${m[2]}</em></button>`).join('')}</div>
+ <button class="link" data-role="">تغيير الدور</button></section>`;
+}
+let tt;
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),2600)}
+document.addEventListener('click',e=>{
+ const a=e.target.closest('[data-role]');
+ if(a){S.role=a.dataset.role||null;save();render();window.scrollTo(0,0);return}
+ const m=e.target.closest('.row');
+ if(m)toast('«'+m.dataset.t+'» تُضاف في المرحلة '+m.dataset.n+' من الخطة');
+});
+document.addEventListener('change',e=>{if(e.target.id==='stage'){S.stage=+e.target.value;save()}});
+render();
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+</script>
+</body>
+</html>
